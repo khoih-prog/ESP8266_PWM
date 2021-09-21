@@ -764,7 +764,7 @@ Channel : 7	Period : 125000		OnTime : 68750	Start_Time : 2072624
 
 Debug is enabled by default on Serial.
 
-You can also change the debugging level (_PWM_LOGLEVEL_) from 0 to 4
+You can also change the debugging level `_PWM_LOGLEVEL_` from 0 to 4
 
 ```cpp
 // These define's must be placed at the beginning before #include "ESP8266_PWM.h"
