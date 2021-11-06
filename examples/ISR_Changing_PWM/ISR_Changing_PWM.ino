@@ -143,7 +143,7 @@ void loop()
 #else
   #if USING_MICROS_RESOLUTION
   // Or using period in microsecs resolution
-  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Freq1, PWM_DutyCycle1);
+  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period1, PWM_DutyCycle1);
   #else
   // Or using period in millisecs resolution
   channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period1 / 1000, PWM_DutyCycle1);
@@ -164,7 +164,7 @@ void loop()
 #else
   #if USING_MICROS_RESOLUTION
   // Or using period in microsecs resolution
-  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Freq2, PWM_DutyCycle2);
+  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period2, PWM_DutyCycle2);
   #else
   // Or using period in millisecs resolution
   channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period2 / 1000, PWM_DutyCycle2);
