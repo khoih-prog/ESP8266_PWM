@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  ISR_16_PWMs_Array_Simple.ino
+  ISR_Changing_PWM.ino
   For ESP8266 boards
   Written by Khoi Hoang
 
