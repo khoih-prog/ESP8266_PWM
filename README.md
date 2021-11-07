@@ -16,6 +16,7 @@
   * [Why using ISR-based PWM-channels is better](#Why-using-ISR-based-PWM-channels-is-better)
   * [Currently supported Boards](#currently-supported-boards)
   * [Important Notes about ISR](#important-notes-about-isr)
+* [Changelog](changelog.md) 
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
@@ -24,14 +25,18 @@
 * [HOWTO Fix `Multiple Definitions` Linker Error](#howto-fix-multiple-definitions-linker-error)
 * [More useful Information](#more-useful-information)
 * [Examples](#examples)
-  * [  1. ISR_16_PWMs_Array](examples/ISR_16_PWMs_Array)
-  * [  2. ISR_16_PWMs_Array_Complex](examples/ISR_16_PWMs_Array_Complex)
-  * [  3. ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple)
+  * [ 1. ISR_16_PWMs_Array](examples/ISR_16_PWMs_Array)
+  * [ 2. ISR_16_PWMs_Array_Complex](examples/ISR_16_PWMs_Array_Complex)
+  * [ 3. ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple)
+  * [ 4. ISR_Changing_PWM](examples/ISR_Changing_PWM)
+  * [ 5. ISR_Modify_PWM](examples/ISR_Modify_PWM)
 * [Example ISR_16_PWMs_Array_Complex](#Example-ISR_16_PWMs_Array_Complex)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E](#1-ISR_16_PWMs_Array_Complex-on-ESP8266_NODEMCU_ESP12E)
   * [2. ISR_16_PWMs_Array on ESP8266_NODEMCU_ESP12E](#2-ISR_16_PWMs_Array-on-ESP8266_NODEMCU_ESP12E)
   * [3. ISR_16_PWMs_Array_Simple on ESP8266_NODEMCU_ESP12E](#3-ISR_16_PWMs_Array_Simple-on-ESP8266_NODEMCU_ESP12E)
+  * [4. ISR_Modify_PWM on ESP8266_NODEMCU_ESP12E](#4-ISR_Modify_PWM-on-ESP8266_NODEMCU_ESP12E)
+  * [5. ISR_Changing_PWM on ESP8266_NODEMCU_ESP12E](#5-ISR_Changing_PWM-on-ESP8266_NODEMCU_ESP12E)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -49,7 +54,7 @@
 
 ## Features
 
-This library enables you to use Interrupt from Hardware Timers on an ESP8266-based board to create and output PWM to pins. The maximum PWM frequency is currently limited at **500Hz**.
+This library enables you to use Interrupt from Hardware Timers on an ESP8266-based board to create and output PWM to pins. The maximum PWM frequency is currently limited at **500Hz**. Now you can also modify PWM settings on-the-fly.
 
 ---
 
@@ -199,7 +204,9 @@ You'll see blynkTimer Software is blocked while system is connecting to WiFi / I
 
  1. [ISR_16_PWMs_Array](examples/ISR_16_PWMs_Array)
  2. [ISR_16_PWMs_Array_Complex](examples/ISR_16_PWMs_Array_Complex)
- 3. [ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple) 
+ 3. [ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple)
+ 4. [ISR_Changing_PWM](examples/ISR_Changing_PWM)
+ 5. [ISR_Modify_PWM](examples/ISR_Modify_PWM) 
 
 ---
 ---
@@ -671,7 +678,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.0.0
+ESP8266_PWM v1.1.0
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: _fre = 312500.00 , _count = 6
 Starting ITimer OK, micros() = 2068917
@@ -720,7 +727,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.0.0
+ESP8266_PWM v1.1.0
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: _fre = 312500.00 , _count = 6
 Starting ITimer OK, micros() = 2069342
@@ -743,7 +750,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Simple on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.0.0
+ESP8266_PWM v1.1.0
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: _fre = 312500.00 , _count = 6
 Starting ITimer OK, micros() = 2069144
@@ -755,6 +762,65 @@ Channel : 4	Period : 200000		OnTime : 80000	Start_Time : 2072624
 Channel : 5	Period : 166667		OnTime : 75000	Start_Time : 2072624
 Channel : 6	Period : 142857		OnTime : 71428	Start_Time : 2072624
 Channel : 7	Period : 125000		OnTime : 68750	Start_Time : 2072624
+```
+
+---
+
+### 4. ISR_Modify_PWM on **ESP8266_NODEMCU_ESP12E**
+
+The following is the sample terminal output when running example [ISR_Modify_PWM](examples/ISR_Modify_PWM) to demonstrate how to modify PWM settings on-the-fly without deleting the PWM channel
+
+```
+Starting ISR_Modify_PWM on ESP8266_NODEMCU_ESP12E
+ESP8266_PWM v1.1.0
+CPU Frequency = 160 MHz
+[PWM] ESP8266TimerInterrupt: _fre = 312500.00 , _count = 6
+Starting ITimer OK, micros() = 2067012
+Using PWM Freq = 1.00, PWM DutyCycle = 10
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 2074213
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 12081063
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 22082014
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 32083015
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 42084018
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 52085016
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 62086011
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 72087015
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 82088012
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 92089018
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 102090015
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 112091018
+Channel : 0	Period : 1000000		OnTime : 100000	Start_Time : 122092014
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 132093012
+```
+
+---
+
+### 5. ISR_Changing_PWM on **ESP8266_NODEMCU_ESP12E**
+
+The following is the sample terminal output when running example [ISR_Changing_PWM](examples/ISR_Changing_PWM) to demonstrate how to modify PWM settings on-the-fly by deleting the PWM channel and reinit the PWM channel
+
+```
+Starting ISR_Changing_PWM on ESP8266_NODEMCU_ESP12E
+ESP8266_PWM v1.1.0
+CPU Frequency = 160 MHz
+[PWM] ESP8266TimerInterrupt: _fre = 312500.00 , _count = 6
+Starting ITimer OK, micros() = 2069740
+Using PWM Freq = 1.00, PWM DutyCycle = 50
+Channel : 0	Period : 1000000		OnTime : 500000	Start_Time : 2077044
+Using PWM Freq = 2.00, PWM DutyCycle = 90
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 12082957
+Using PWM Freq = 1.00, PWM DutyCycle = 50
+Channel : 0	Period : 1000000		OnTime : 500000	Start_Time : 22083187
+Using PWM Freq = 2.00, PWM DutyCycle = 90
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 32083386
+Using PWM Freq = 1.00, PWM DutyCycle = 50
+Channel : 0	Period : 1000000		OnTime : 500000	Start_Time : 42083596
+Using PWM Freq = 2.00, PWM DutyCycle = 90
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 52083796
+Using PWM Freq = 1.00, PWM DutyCycle = 50
+Channel : 0	Period : 1000000		OnTime : 500000	Start_Time : 62084005
+Using PWM Freq = 2.00, PWM DutyCycle = 90
+Channel : 0	Period : 500000		OnTime : 450000	Start_Time : 72084206
 ```
 
 ---
@@ -803,6 +869,7 @@ Submit issues to: [ESP8266_PWM issues](https://github.com/khoih-prog/ESP8266_PWM
 1. Basic hardware PWM-channels for ESP8266 for [ESP8266 core v3.0.2+](https://github.com/esp8266/Arduino/releases/tag/3.0.2)
 2. Longer time interval
 3. Add complex examples.
+4. Add functions to modify PWM settings on-the-fly
 
 ---
 ---
@@ -811,6 +878,16 @@ Submit issues to: [ESP8266_PWM issues](https://github.com/khoih-prog/ESP8266_PWM
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
+1. Thanks to [AnselPeng2019](https://github.com/AnselPeng2019) to request new feature to modify PWM settings on-the-fly in
+
+- [Change Duty Cycle #1](https://github.com/khoih-prog/ESP8266_PWM/issues/1) leading to v1.1.0
+
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/AnselPeng2019"><img src="https://github.com/AnselPeng2019.png" width="100px;" alt="AnselPeng2019"/><br /><sub><b>AnselPeng2019</b></sub></a><br /></td>
+  </tr>
+</table>
 
 ---
 

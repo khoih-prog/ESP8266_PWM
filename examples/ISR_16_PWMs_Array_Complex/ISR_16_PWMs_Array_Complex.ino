@@ -19,12 +19,6 @@
   The accuracy is nearly perfect compared to software timers. The most important feature is they're ISR-based timers
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
-
-  Version: 1.0.0
-
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      20/09/2021 Initial coding for ESP8266, ESP8266_S2, ESP8266_C3 boards with ESP8266 core v2.0.0+
 *****************************************************************************************************************************/
 
 #if !defined(ESP8266)
@@ -371,13 +365,14 @@ void simpleTimerdoingSomething2s()
     
     Serial.print(F(", actual : ")); Serial.print(curISR_PWM_Data[i].deltaMicrosStart);
 
-  Serial.print(F(", programmed DutyCycle : ")); 
+    Serial.print(F(", programmed DutyCycle : ")); 
 
-  Serial.print(curISR_PWM_Data[i].PWM_DutyCycle);
+    Serial.print(curISR_PWM_Data[i].PWM_DutyCycle);
     
-  Serial.print(F(", actual : ")); Serial.println((float) curISR_PWM_Data[i].deltaMicrosStop * 100.0f / curISR_PWM_Data[i].deltaMicrosStart);
+    Serial.print(F(", actual : ")); Serial.println((float) curISR_PWM_Data[i].deltaMicrosStop * 100.0f / curISR_PWM_Data[i].deltaMicrosStart);
     
 #else
+
     Serial.print(F("PWM Channel : ")); Serial.print(i);
     
   #if USING_PWM_FREQUENCY
@@ -402,8 +397,6 @@ void simpleTimerdoingSomething2s()
 
 void setup()
 {
-  pinMode(LED_BUILTIN, OUTPUT);
-
   Serial.begin(115200);
   while (!Serial);
 

@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  ISR_Changing_PWM.ino
+  ISR_Modify_PWM.ino
   For ESP8266 boards
   Written by Khoi Hoang
 
@@ -51,28 +51,7 @@ void IRAM_ATTR TimerHandler()
 
 //////////////////////////////////////////////////////
 
-//PIN_D0 can't be used for PWM/I2C
-#define PIN_D0            16        // Pin D0 mapped to pin GPIO16/USER/WAKE of ESP8266. This pin is also used for Onboard-Blue LED. PIN_D0 = 0 => LED ON
-#define PIN_D1            5         // Pin D1 mapped to pin GPIO5 of ESP8266
-#define PIN_D2            4         // Pin D2 mapped to pin GPIO4 of ESP8266
-#define PIN_D3            0         // Pin D3 mapped to pin GPIO0/FLASH of ESP8266
-#define PIN_D4            2         // Pin D4 mapped to pin GPIO2/TXD1 of ESP8266
-//#define PIN_LED           2         // Pin D4 mapped to pin GPIO2/TXD1 of ESP8266, NodeMCU and WeMoS, control on-board LED
-#define PIN_D5            14        // Pin D5 mapped to pin GPIO14/HSCLK of ESP8266
-#define PIN_D6            12        // Pin D6 mapped to pin GPIO12/HMISO of ESP8266
-#define PIN_D7            13        // Pin D7 mapped to pin GPIO13/RXD2/HMOSI of ESP8266
-#define PIN_D8            15        // Pin D8 mapped to pin GPIO15/TXD2/HCS of ESP8266
-#define PIN_D9            3         // Pin D9 /RX mapped to pin GPIO3/RXD0 of ESP8266
-#define PIN_D10           1         // Pin D10/TX mapped to pin GPIO1/TXD0 of ESP8266
-
-//Don't use pins GPIO6 to GPIO11 as already connected to flash, etc. Use them can crash the program
-//GPIO9(D11/SD2) and GPIO11 can be used only if flash in DIO mode ( not the default QIO mode)
-#define PIN_D11           9         // Pin D11/SD2 mapped to pin GPIO9/SDD2 of ESP8266
-#define PIN_D12           10        // Pin D12/SD3 mapped to pin GPIO10/SDD3 of ESP8266
-
-//////////////////////////////////////////////////////
-
-#define USING_PWM_FREQUENCY     true
+#define USING_PWM_FREQUENCY     false //true
 
 //////////////////////////////////////////////////////
 
@@ -90,7 +69,7 @@ uint32_t PWM_Period1 = 1000000 / PWM_Freq1;
 uint32_t PWM_Period2 = 1000000 / PWM_Freq2;
 
 // You can assign any duty_cycle for any PWM here, from 0-100
-uint32_t PWM_DutyCycle1  = 50;
+uint32_t PWM_DutyCycle1  = 10;
 // You can assign any duty_cycle for any PWM here, from 0-100
 uint32_t PWM_DutyCycle2  = 90;
 
@@ -106,7 +85,7 @@ void setup()
 
   delay(2000);
 
-  Serial.print(F("\nStarting ISR_Changing_PWM on ")); Serial.println(ARDUINO_BOARD);
+  Serial.print(F("\nStarting ISR_Modify_PWM on ")); Serial.println(ARDUINO_BOARD);
   Serial.println(ESP8266_PWM_VERSION);
   Serial.print(F("CPU Frequency = ")); Serial.print(F_CPU / 1000000); Serial.println(F(" MHz"));
 
@@ -123,16 +102,12 @@ void setup()
   // You can use up to 16 timer for each ISR_PWM
   //void setPWM(uint32_t pin, uint32_t frequency, uint32_t dutycycle
   // , timer_callback_p StartCallback = nullptr, timer_callback_p StopCallback = nullptr)
-}
-
-void loop()
-{ 
   Serial.print(F("Using PWM Freq = ")); Serial.print(PWM_Freq1); Serial.print(F(", PWM DutyCycle = ")); Serial.println(PWM_DutyCycle1);
-  
+
 #if USING_PWM_FREQUENCY
 
   // You can use this with PWM_Freq in Hz
-  channelNum = ISR_PWM.setPWM(PWM_Pin, PWM_Freq1, PWM_DutyCycle1);
+  ISR_PWM.setPWM(PWM_Pin, PWM_Freq1, PWM_DutyCycle1);
 
 #else
   #if USING_MICROS_RESOLUTION
@@ -143,29 +118,60 @@ void loop()
   channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period1 / 1000, PWM_DutyCycle1);
   #endif
 #endif
+}
 
-  delay(10000);
+////////////////////////////////////////////////
 
-  ISR_PWM.deleteChannel((unsigned) channelNum);
+void changePWM()
+{
+  static uint8_t count = 1;
 
-  Serial.print(F("Using PWM Freq = ")); Serial.print(PWM_Freq2); Serial.print(F(", PWM DutyCycle = ")); Serial.println(PWM_DutyCycle2);
+  double PWM_Freq;
+  uint32_t PWM_DutyCycle;
 
-#if USING_PWM_FREQUENCY
+  if (count++ % 2)
+  {
+    PWM_Freq        = PWM_Freq2; 
+    PWM_DutyCycle   = PWM_DutyCycle2;
+  }
+  else
+  {
+    PWM_Freq        = PWM_Freq1;
+    PWM_DutyCycle   = PWM_DutyCycle1;
+  }
 
   // You can use this with PWM_Freq in Hz
-  channelNum = ISR_PWM.setPWM(PWM_Pin, PWM_Freq2, PWM_DutyCycle2);
+  if (!ISR_PWM.modifyPWMChannel(channelNum, PWM_Pin, PWM_Freq, PWM_DutyCycle))
+  {
+    Serial.print(F("modifyPWMChannel error for PWM_Period"));
+  }
+}
 
-#else
-  #if USING_MICROS_RESOLUTION
-  // Or using period in microsecs resolution
-  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period2, PWM_DutyCycle2);
-  #else
-  // Or using period in millisecs resolution
-  channelNum = ISR_PWM.setPWM_Period(PWM_Pin, PWM_Period2 / 1000, PWM_DutyCycle2);
-  #endif
-#endif
+////////////////////////////////////////////////
 
-  delay(10000);
+void changingPWM()
+{
+  static ulong changingPWM_timeout = 0;
 
-  ISR_PWM.deleteChannel((unsigned) channelNum);
+  static ulong current_millis;
+
+#define CHANGING_PWM_INTERVAL    10000L
+
+  current_millis = millis();
+
+  // changePWM every CHANGING_PWM_INTERVAL (10) seconds.
+  if ( (current_millis > changingPWM_timeout) )
+  {
+    if (changingPWM_timeout > 0)
+      changePWM();
+      
+    changingPWM_timeout = current_millis + CHANGING_PWM_INTERVAL;
+  }
+}
+
+////////////////////////////////////////////////
+
+void loop()
+{
+  changingPWM();
 }

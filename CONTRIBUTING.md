@@ -27,10 +27,10 @@ Please ensure to specify the following:
 
 ```
 Arduino IDE version: 1.8.16
-ESP8266 core v3.020
+ESP8266 core v3.0.2
 ESP8266_NODEMCU_ESP12E Module
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.4.0-84-generic #94-Ubuntu SMP Thu Aug 26 20:27:37 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.4.0-86-generic #97-Ubuntu SMP Fri Sep 17 19:19:40 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered a crash while using TimerInterrupt.
