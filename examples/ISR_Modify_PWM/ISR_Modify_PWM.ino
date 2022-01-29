@@ -26,8 +26,14 @@
 // Don't define _PWM_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
 #define _PWM_LOGLEVEL_                4
 
-#define USING_MICROS_RESOLUTION       true    //false 
+#define USING_MICROS_RESOLUTION       true    //false
 
+// Select a Timer Clock
+#define USING_TIM_DIV1                true              // for shortest and most accurate timer
+#define USING_TIM_DIV16               false             // for medium time and medium accurate timer
+#define USING_TIM_DIV256              false             // for longest timer but least accurate. Default
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.h"
 
 #ifndef LED_BUILTIN
@@ -64,14 +70,14 @@ double PWM_Freq1   = 1.0f;
 double PWM_Freq2   = 2.0f;
 
 // You can assign any interval for any timer here, in microseconds
-uint32_t PWM_Period1 = 1000000 / PWM_Freq1;
+double PWM_Period1 = 1000000.0 / PWM_Freq1;
 // You can assign any interval for any timer here, in microseconds
-uint32_t PWM_Period2 = 1000000 / PWM_Freq2;
+double PWM_Period2 = 1000000.0 / PWM_Freq2;
 
 // You can assign any duty_cycle for any PWM here, from 0-100
-uint32_t PWM_DutyCycle1  = 10;
+double PWM_DutyCycle1  = 10.0;
 // You can assign any duty_cycle for any PWM here, from 0-100
-uint32_t PWM_DutyCycle2  = 90;
+double PWM_DutyCycle2  = 90.0;
 
 // Channel number used to identify associated channel
 int channelNum;

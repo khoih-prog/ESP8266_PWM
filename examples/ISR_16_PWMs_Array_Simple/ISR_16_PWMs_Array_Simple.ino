@@ -26,8 +26,14 @@
 // Don't define _PWM_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
 #define _PWM_LOGLEVEL_                4
 
-#define USING_MICROS_RESOLUTION       true    //false 
+#define USING_MICROS_RESOLUTION       true    //false
 
+// Select a Timer Clock
+#define USING_TIM_DIV1                true              // for shortest and most accurate timer
+#define USING_TIM_DIV16               false             // for medium time and medium accurate timer
+#define USING_TIM_DIV256              false             // for longest timer but least accurate. Default
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.h"
 
 #ifndef LED_BUILTIN
@@ -85,21 +91,22 @@ uint32_t PWM_Pin[NUMBER_ISR_PWMS] =
 };
 
 // You can assign any interval for any timer here, in microseconds
-uint32_t PWM_Period[NUMBER_ISR_PWMS] =
+double PWM_Period[NUMBER_ISR_PWMS] =
 {
-  1000000L,   500000L,   333333L,   250000L,   200000L,   166667L,   142857L,   125000L
+  1000000.0,   500000.0,   333333.333,   250000.0,   200000.0,   166666.667,   142857.143,   125000.0
 };
+
 
 // You can assign any interval for any timer here, in Hz
-uint32_t PWM_Freq[NUMBER_ISR_PWMS] =
+double PWM_Freq[NUMBER_ISR_PWMS] =
 {
-   1,  2,  3,  4,  5,  6,  7,  8
+  1.0,  2.0,  3.0,  4.0,  5.0,  6.0,  7.0,  8.0
 };
 
-// You can assign any interval for any timer here, in milliseconds
-uint32_t PWM_DutyCycle[NUMBER_ISR_PWMS] =
+// You can assign any interval for any timer here, in Microseconds
+double PWM_DutyCycle[NUMBER_ISR_PWMS] =
 {
-   5, 10, 20, 30, 40, 45, 50, 55
+   5.0, 10.0, 20.0, 30.0, 40.0, 45.0, 50.0, 55.0
 };
 
 ////////////////////////////////////////////////

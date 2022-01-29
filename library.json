@@ -22,8 +22,10 @@
       "tests"
     ]
   },
+  "license": "MIT",
   "frameworks": "*",
   "platforms": "espressif8266",
   "examples": "examples/*/*/*.ino",
-  "license": "MIT"
+  "headers": ["ESP8266_PWM.h", "ESP8266_PWM.hpp"]
+  
 }

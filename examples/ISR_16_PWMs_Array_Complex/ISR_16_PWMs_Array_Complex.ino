@@ -30,8 +30,14 @@
 // Don't define _PWM_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
 #define _PWM_LOGLEVEL_      4
 
-#define USING_MICROS_RESOLUTION       true    //false 
+#define USING_MICROS_RESOLUTION       true    //false
 
+// Select a Timer Clock
+#define USING_TIM_DIV1                true              // for shortest and most accurate timer
+#define USING_TIM_DIV16               false             // for medium time and medium accurate timer
+#define USING_TIM_DIV256              false             // for longest timer but least accurate. Default
+
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.h"
 
 #include <SimpleTimer.h>              // https://github.com/jfturcot/SimpleTimer
@@ -97,12 +103,12 @@ typedef struct
   irqCallback   irqCallbackStopFunc;
 
 #if USING_PWM_FREQUENCY  
-  uint32_t      PWM_Freq;
+  double        PWM_Freq;
 #else  
-  uint32_t      PWM_Period;
+  double        PWM_Period;
 #endif
   
-  uint32_t      PWM_DutyCycle;
+  double        PWM_DutyCycle;
   
   uint64_t      deltaMicrosStart;
   uint64_t      previousMicrosStart;
@@ -134,22 +140,22 @@ uint32_t PWM_Pin[NUMBER_ISR_PWMS] =
 };
 
 // You can assign any interval for any timer here, in microseconds
-uint32_t PWM_Period[NUMBER_ISR_PWMS] =
+double PWM_Period[NUMBER_ISR_PWMS] =
 {
-  1000000L,   500000L,   333333L,   250000L,   200000L,   166667L,   142857L,   125000L
+  1000000.0,   500000.0,   333333.333,   250000.0,   200000.0,   166666.667,   142857.143,   125000.0
 };
 
 
 // You can assign any interval for any timer here, in Hz
-uint32_t PWM_Freq[NUMBER_ISR_PWMS] =
+double PWM_Freq[NUMBER_ISR_PWMS] =
 {
-  1,  2,  3,  4,  5,  6,  7,  8
+  1.0,  2.0,  3.0,  4.0,  5.0,  6.0,  7.0,  8.0
 };
 
 // You can assign any interval for any timer here, in Microseconds
-uint32_t PWM_DutyCycle[NUMBER_ISR_PWMS] =
+double PWM_DutyCycle[NUMBER_ISR_PWMS] =
 {
-   5, 10, 20, 30, 40, 45, 50, 55
+   5.0, 10.0, 20.0, 30.0, 40.0, 45.0, 50.0, 55.0
 };
 
 ///////////////////////////////////
@@ -269,14 +275,14 @@ void doingSomethingStop7()
   ISR_PWM_Data curISR_PWM_Data[NUMBER_ISR_PWMS] =
   {
     //pin, irqCallbackStartFunc, irqCallbackStopFunc, PWM_Period, deltaMicrosStart, previousMicrosStart, deltaMicrosStop, previousMicrosStop
-    { PIN_D0,       doingSomethingStart0,   doingSomethingStop0,   1,   5, 0, 0, 0, 0 },
-    { PIN_D1,       doingSomethingStart1,   doingSomethingStop1,   2,  10, 0, 0, 0, 0 },
-    { LED_BUILTIN,  doingSomethingStart2,   doingSomethingStop2,   3,  20, 0, 0, 0, 0 },
-    { PIN_D3,       doingSomethingStart3,   doingSomethingStop3,   4,  30, 0, 0, 0, 0 },
-    { PIN_D4,       doingSomethingStart4,   doingSomethingStop4,   5,  40, 0, 0, 0, 0 },
-    { PIN_D5,       doingSomethingStart5,   doingSomethingStop5,   6,  45, 0, 0, 0, 0 },
-    { PIN_D6,       doingSomethingStart6,   doingSomethingStop6,   7,  50, 0, 0, 0, 0 },
-    { PIN_D7,       doingSomethingStart7,   doingSomethingStop7,   8,  55, 0, 0, 0, 0 },
+    { PIN_D0,       doingSomethingStart0,   doingSomethingStop0,   1.0,   5.0, 0, 0, 0, 0 },
+    { PIN_D1,       doingSomethingStart1,   doingSomethingStop1,   2.0,  10.0, 0, 0, 0, 0 },
+    { LED_BUILTIN,  doingSomethingStart2,   doingSomethingStop2,   3.0,  20.0, 0, 0, 0, 0 },
+    { PIN_D3,       doingSomethingStart3,   doingSomethingStop3,   4.0,  30.0, 0, 0, 0, 0 },
+    { PIN_D4,       doingSomethingStart4,   doingSomethingStop4,   5.0,  40.0, 0, 0, 0, 0 },
+    { PIN_D5,       doingSomethingStart5,   doingSomethingStop5,   6.0,  45.0, 0, 0, 0, 0 },
+    { PIN_D6,       doingSomethingStart6,   doingSomethingStop6,   7.0,  50.0, 0, 0, 0, 0 },
+    { PIN_D7,       doingSomethingStart7,   doingSomethingStop7,   8.0,  55.0, 0, 0, 0, 0 },
   };
   
   #else   // #if USING_PWM_FREQUENCY
@@ -284,14 +290,14 @@ void doingSomethingStop7()
   ISR_PWM_Data curISR_PWM_Data[NUMBER_ISR_PWMS] =
   {
     //irqCallbackStartFunc, PWM_Period, deltaMicrosStart, previousMicrosStart, deltaMicrosStop, previousMicrosStop
-    { PIN_D0,       doingSomethingStart0,   doingSomethingStop0,   1000000L,   5, 0, 0, 0, 0 },
-    { PIN_D1,       doingSomethingStart1,   doingSomethingStop1,    500000L,  10, 0, 0, 0, 0 },
-    { LED_BUILTIN,  doingSomethingStart2,   doingSomethingStop2,    333333L,  20, 0, 0, 0, 0 },
-    { PIN_D3,       doingSomethingStart3,   doingSomethingStop3,    250000L,  30, 0, 0, 0, 0 },
-    { PIN_D4,       doingSomethingStart4,   doingSomethingStop4,    200000L,  40, 0, 0, 0, 0 },
-    { PIN_D5,       doingSomethingStart5,   doingSomethingStop5,    166667L,  45, 0, 0, 0, 0 },
-    { PIN_D6,       doingSomethingStart6,   doingSomethingStop6,    142857L,  50, 0, 0, 0, 0 },
-    { PIN_D7,       doingSomethingStart7,   doingSomethingStop7,    125000L,  55, 0, 0, 0, 0 },
+    { PIN_D0,       doingSomethingStart0,   doingSomethingStop0,   1000000.0,     5.0, 0, 0, 0, 0 },
+    { PIN_D1,       doingSomethingStart1,   doingSomethingStop1,    500000.0,    10.0, 0, 0, 0, 0 },
+    { LED_BUILTIN,  doingSomethingStart2,   doingSomethingStop2,    333333,333,  20.0, 0, 0, 0, 0 },
+    { PIN_D3,       doingSomethingStart3,   doingSomethingStop3,    250000.0,    30.0, 0, 0, 0, 0 },
+    { PIN_D4,       doingSomethingStart4,   doingSomethingStop4,    200000.0,    40.0, 0, 0, 0, 0 },
+    { PIN_D5,       doingSomethingStart5,   doingSomethingStop5,    166666.667,  45.0, 0, 0, 0, 0 },
+    { PIN_D6,       doingSomethingStart6,   doingSomethingStop6,    142857.143,  50.0, 0, 0, 0, 0 },
+    { PIN_D7,       doingSomethingStart7,   doingSomethingStop7,    125000.0,    55.0, 0, 0, 0, 0 },
   };
   
   #endif  // #if USING_PWM_FREQUENCY
@@ -376,7 +382,7 @@ void simpleTimerdoingSomething2s()
     Serial.print(F("PWM Channel : ")); Serial.print(i);
     
   #if USING_PWM_FREQUENCY
-    Serial.print(1000000 / PWM_Freq[i]);
+    Serial.print(1000000.0 / PWM_Freq[i]);
   #else
     Serial.print(PWM_Period[i]);
   #endif
