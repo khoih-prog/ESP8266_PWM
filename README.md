@@ -31,6 +31,7 @@
   * [ 3. ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple)
   * [ 4. ISR_Changing_PWM](examples/ISR_Changing_PWM)
   * [ 5. ISR_Modify_PWM](examples/ISR_Modify_PWM)
+  * [ 6. multiFileProject](examples/multiFileProject)
 * [Example ISR_16_PWMs_Array_Complex](#Example-ISR_16_PWMs_Array_Complex)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E](#1-ISR_16_PWMs_Array_Complex-on-ESP8266_NODEMCU_ESP12E)
