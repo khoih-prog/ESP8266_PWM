@@ -695,7 +695,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.0
+ESP8266_PWM v1.2.1
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
@@ -736,7 +736,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.0
+ESP8266_PWM v1.2.1
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
@@ -760,7 +760,7 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Simple on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.0
+ESP8266_PWM v1.2.1
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
@@ -783,7 +783,7 @@ The following is the sample terminal output when running example [ISR_Modify_PWM
 
 ```
 Starting ISR_Modify_PWM on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.0
+ESP8266_PWM v1.2.1
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
@@ -805,7 +805,7 @@ The following is the sample terminal output when running example [ISR_Changing_P
 
 ```
 Starting ISR_Changing_PWM on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.0
+ESP8266_PWM v1.2.1
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
@@ -867,6 +867,9 @@ Submit issues to: [ESP8266_PWM issues](https://github.com/khoih-prog/ESP8266_PWM
 2. Longer time interval
 3. Add complex examples.
 4. Add functions to modify PWM settings on-the-fly
+5. Improve accuracy by using `double`, instead of `uint32_t` for `dutycycle`, `period`
+6. Optimize library code by using `reference-passing` instead of `value-passing`
+
 
 ---
 ---

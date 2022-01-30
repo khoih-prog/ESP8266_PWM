@@ -16,12 +16,14 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.1.0
+  Version: 1.2.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      21/09/2021 Initial coding for ESP8266 boards with ESP8266 core v3.0.2+
   1.1.0   K Hoang      06/11/2021 Add functions to modify PWM settings on-the-fly
+  1.2.0   K Hoang      29/01/2022 Fix multiple-definitions linker error. Improve accuracy
+  1.2.1   K Hoang      30/01/2022 Fix bug. Optimize code
 *****************************************************************************************************************************/
 
 #pragma once
@@ -109,7 +111,7 @@ class ESP8266_PWM_ISR
     {
       double period = 0.0;
       
-      if ( ( frequency > 0 ) && ( frequency <= 500 ) )
+      if ( ( frequency > 0.0 ) && ( frequency <= 500.0 ) )
       {
 #if USING_MICROS_RESOLUTION
       // period in us
@@ -131,8 +133,8 @@ class ESP8266_PWM_ISR
 
     // period in us
     // Return the channelNum if OK, -1 if error
-    int setPWM_Period(const uint32_t& pin, const double& period, const double& dutycycle, esp8266_timer_callback StartCallback = nullptr,
-                       esp8266_timer_callback StopCallback = nullptr)  
+    int setPWM_Period(const uint32_t& pin, const double& period, const double& dutycycle, 
+                      esp8266_timer_callback StartCallback = nullptr, esp8266_timer_callback StopCallback = nullptr)  
     {     
       return setupPWMChannel(pin, period, dutycycle, (void *) StartCallback, (void *) StopCallback);      
     }    
@@ -141,11 +143,11 @@ class ESP8266_PWM_ISR
     
     // low level function to modify a PWM channel
     // returns the true on success or false on failure
-    bool modifyPWMChannel(const unsigned& channelNum, const uint32_t& pin, const double& frequency, const double& dutycycle)
+    bool modifyPWMChannel(const uint8_t& channelNum, const uint32_t& pin, const double& frequency, const double& dutycycle)
     {
-      uint32_t period = 0;
+      double period = 0.0;
       
-      if ( ( frequency > 0 ) && ( frequency <= 500 ) )
+      if ( ( frequency > 0.0 ) && ( frequency <= 500.0 ) )
       {
 #if USING_MICROS_RESOLUTION
       // period in us
@@ -165,22 +167,22 @@ class ESP8266_PWM_ISR
     }
     
     //period in us
-    bool modifyPWMChannel_Period(const unsigned& channelNum, const uint32_t& pin, const double& period, const double& dutycycle);
+    bool modifyPWMChannel_Period(const uint8_t& channelNum, const uint32_t& pin, const double& period, const double& dutycycle);
 
     // destroy the specified PWM channel
-    void deleteChannel(const unsigned& channelNum);
+    void deleteChannel(const uint8_t& channelNum);
 
     // restart the specified PWM channel
-    void restartChannel(const unsigned& channelNum);
+    void restartChannel(const uint8_t& channelNum);
 
     // returns true if the specified PWM channel is enabled
-    bool isEnabled(const unsigned& channelNum);
+    bool isEnabled(const uint8_t& channelNum);
 
     // enables the specified PWM channel
-    void enable(const unsigned& channelNum);
+    void enable(const uint8_t& channelNum);
 
     // disables the specified PWM channel
-    void disable(const unsigned& channelNum);
+    void disable(const uint8_t& channelNum);
 
     // enables all PWM channels
     void enableAll();
@@ -189,15 +191,18 @@ class ESP8266_PWM_ISR
     void disableAll();
 
     // enables the specified PWM channel if it's currently disabled, and vice-versa
-    void toggle(const unsigned& channelNum);
+    void toggle(const uint8_t& channelNum);
 
     // returns the number of used PWM channels
-    unsigned getnumChannels();
+    int8_t getnumChannels();
 
     // returns the number of available PWM channels
-    unsigned getNumAvailablePWMChannels() 
+    uint8_t getNumAvailablePWMChannels() 
     {
-      return MAX_NUMBER_CHANNELS - numChannels;
+      if (numChannels <= 0)
+        return MAX_NUMBER_CHANNELS;
+      else 
+        return MAX_NUMBER_CHANNELS - numChannels;
     };
 
   private:
@@ -237,7 +242,7 @@ class ESP8266_PWM_ISR
     volatile PWM_t PWM[MAX_NUMBER_CHANNELS];
 
     // actual number of PWM channels in use (-1 means uninitialized)
-    volatile int numChannels;
+    volatile int8_t numChannels;
 };
 
 

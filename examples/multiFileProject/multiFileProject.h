@@ -12,5 +12,12 @@
 
 #pragma once
 
+#define USING_MICROS_RESOLUTION       true    //false
+
+// Select a Timer Clock
+#define USING_TIM_DIV1                true              // for shortest and most accurate timer
+#define USING_TIM_DIV16               false             // for medium time and medium accurate timer
+#define USING_TIM_DIV256              false             // for longest timer but least accurate. Default
+
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.hpp"
