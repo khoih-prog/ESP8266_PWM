@@ -16,7 +16,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.2.1
+  Version: 1.2.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.1.0   K Hoang      06/11/2021 Add functions to modify PWM settings on-the-fly
   1.2.0   K Hoang      29/01/2022 Fix multiple-definitions linker error. Improve accuracy
   1.2.1   K Hoang      30/01/2022 Fix bug. Optimize code
+  1.2.2   K Hoang      30/01/2022 DutyCycle to be updated at the end current PWM period
 *****************************************************************************************************************************/
 
 #pragma once
@@ -86,6 +87,11 @@ typedef void (*esp8266_timer_callback_p)(void *);
 #if !defined(USING_MICROS_RESOLUTION)
   #warning Not USING_MICROS_RESOLUTION, using millis resolution
   #define USING_MICROS_RESOLUTION       false
+#endif
+
+#if !defined(CHANGING_PWM_END_OF_CYCLE)
+  #warning Using default CHANGING_PWM_END_OF_CYCLE == true
+  #define CHANGING_PWM_END_OF_CYCLE     true
 #endif
 
 class ESP8266_PWM_ISR 
@@ -237,6 +243,11 @@ class ESP8266_PWM_ISR
       ////////////////////////////////////////////////////////////
       
       bool          enabled;            // true if enabled
+      
+      // New from v1.3.0     
+      double        newPeriod;          // period value, in us / ms
+      double        newDutyCycle;       // from 0.00 to 100.00, double precision
+      //////
     } PWM_t;
 
     volatile PWM_t PWM[MAX_NUMBER_CHANNELS];

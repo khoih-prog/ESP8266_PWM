@@ -123,6 +123,7 @@ The catch is **your function is now part of an ISR (Interrupt Service Routine), 
 
 1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
 2. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/)
+
 3. [`SimpleTimer library`](https://github.com/jfturcot/SimpleTimer) to use with some examples.
 
 
@@ -236,6 +237,9 @@ You'll see blynkTimer Software is blocked while system is connecting to WiFi / I
 #define _PWM_LOGLEVEL_      4
 
 #define USING_MICROS_RESOLUTION       true    //false
+
+// Default is true, uncomment to false
+//#define CHANGING_PWM_END_OF_CYCLE     false
 
 // Select a Timer Clock
 #define USING_TIM_DIV1                true              // for shortest and most accurate timer
@@ -695,37 +699,46 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.1
+ESP8266_PWM v1.2.2
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
-Starting ITimer OK, micros() = 2069892
-Channel : 0	Period : 1000000.00		OnTime : 50000	Start_Time : 2073467
-Channel : 1	Period : 500000.00		OnTime : 50000	Start_Time : 2079470
-Channel : 2	Period : 333333.33		OnTime : 66666	Start_Time : 2085429
-Channel : 3	Period : 250000.00		OnTime : 75000	Start_Time : 2091414
-Channel : 4	Period : 200000.00		OnTime : 80000	Start_Time : 2097400
-Channel : 5	Period : 166666.67		OnTime : 75000	Start_Time : 2103391
-Channel : 6	Period : 142857.14		OnTime : 71428	Start_Time : 2109374
-Channel : 7	Period : 125000.00		OnTime : 68750	Start_Time : 2115359
-SimpleTimer (ms): 2000, ms : 12121418, Dms : 10048065
+Starting ITimer OK, micros() = 2073701
+Channel : 0	    Period : 1000000.00		OnTime : 50000	Start_Time : 2077293
+Channel : 1	    Period : 500000.00		OnTime : 50000	Start_Time : 2083632
+Channel : 2	    Period : 333333.33		OnTime : 66666	Start_Time : 2089938
+Channel : 3	    Period : 250000.00		OnTime : 75000	Start_Time : 2096269
+Channel : 4	    Period : 200000.00		OnTime : 80000	Start_Time : 2102599
+Channel : 5	    Period : 166666.67		OnTime : 75000	Start_Time : 2108940
+Channel : 6	    Period : 142857.14		OnTime : 71428	Start_Time : 2115272
+Channel : 7	    Period : 125000.00		OnTime : 68750	Start_Time : 2121602
+SimpleTimer (ms): 2000, ms : 12128012, Dms : 10050844
 PWM Channel : 0, programmed Period (us): 1000000.00, actual : 1000005, programmed DutyCycle : 5.00, actual : 5.00
-PWM Channel : 1, programmed Period (us): 500000.00, actual : 500012, programmed DutyCycle : 10.00, actual : 10.00
+PWM Channel : 1, programmed Period (us): 500000.00, actual : 500011, programmed DutyCycle : 10.00, actual : 10.00
 PWM Channel : 2, programmed Period (us): 333333.33, actual : 333348, programmed DutyCycle : 20.00, actual : 20.00
 PWM Channel : 3, programmed Period (us): 250000.00, actual : 250015, programmed DutyCycle : 30.00, actual : 29.99
-PWM Channel : 4, programmed Period (us): 200000.00, actual : 200003, programmed DutyCycle : 40.00, actual : 39.99
-PWM Channel : 5, programmed Period (us): 166666.67, actual : 166683, programmed DutyCycle : 45.00, actual : 44.99
+PWM Channel : 4, programmed Period (us): 200000.00, actual : 200004, programmed DutyCycle : 40.00, actual : 39.99
+PWM Channel : 5, programmed Period (us): 166666.67, actual : 166682, programmed DutyCycle : 45.00, actual : 44.99
 PWM Channel : 6, programmed Period (us): 142857.14, actual : 142867, programmed DutyCycle : 50.00, actual : 50.00
 PWM Channel : 7, programmed Period (us): 125000.00, actual : 125016, programmed DutyCycle : 55.00, actual : 54.99
-SimpleTimer (ms): 2000, ms : 22194962, Dms : 10073544
+SimpleTimer (ms): 2000, ms : 22201565, Dms : 10073553
+PWM Channel : 0, programmed Period (us): 1000000.00, actual : 1000005, programmed DutyCycle : 5.00, actual : 5.00
+PWM Channel : 1, programmed Period (us): 500000.00, actual : 500012, programmed DutyCycle : 10.00, actual : 10.00
+PWM Channel : 2, programmed Period (us): 333333.33, actual : 333347, programmed DutyCycle : 20.00, actual : 20.00
+PWM Channel : 3, programmed Period (us): 250000.00, actual : 250014, programmed DutyCycle : 30.00, actual : 29.99
+PWM Channel : 4, programmed Period (us): 200000.00, actual : 200003, programmed DutyCycle : 40.00, actual : 40.00
+PWM Channel : 5, programmed Period (us): 166666.67, actual : 166682, programmed DutyCycle : 45.00, actual : 44.99
+PWM Channel : 6, programmed Period (us): 142857.14, actual : 142872, programmed DutyCycle : 50.00, actual : 49.99
+PWM Channel : 7, programmed Period (us): 125000.00, actual : 125021, programmed DutyCycle : 55.00, actual : 54.99
+SimpleTimer (ms): 2000, ms : 32275077, Dms : 10073512
 PWM Channel : 0, programmed Period (us): 1000000.00, actual : 1000005, programmed DutyCycle : 5.00, actual : 5.00
 PWM Channel : 1, programmed Period (us): 500000.00, actual : 500012, programmed DutyCycle : 10.00, actual : 10.00
 PWM Channel : 2, programmed Period (us): 333333.33, actual : 333347, programmed DutyCycle : 20.00, actual : 20.00
 PWM Channel : 3, programmed Period (us): 250000.00, actual : 250015, programmed DutyCycle : 30.00, actual : 29.99
-PWM Channel : 4, programmed Period (us): 200000.00, actual : 200003, programmed DutyCycle : 40.00, actual : 40.00
-PWM Channel : 5, programmed Period (us): 166666.67, actual : 166682, programmed DutyCycle : 45.00, actual : 44.99
-PWM Channel : 6, programmed Period (us): 142857.14, actual : 142867, programmed DutyCycle : 50.00, actual : 49.99
-PWM Channel : 7, programmed Period (us): 125000.00, actual : 125021, programmed DutyCycle : 55.00, actual : 54.99
+PWM Channel : 4, programmed Period (us): 200000.00, actual : 200007, programmed DutyCycle : 40.00, actual : 40.00
+PWM Channel : 5, programmed Period (us): 166666.67, actual : 166687, programmed DutyCycle : 45.00, actual : 44.99
+PWM Channel : 6, programmed Period (us): 142857.14, actual : 142872, programmed DutyCycle : 50.00, actual : 49.99
+PWM Channel : 7, programmed Period (us): 125000.00, actual : 125021, programmed DutyCycle : 55.00, actual : 54.98
 ```
 
 ---
@@ -736,19 +749,19 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.1
+ESP8266_PWM v1.2.2
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
-Starting ITimer OK, micros() = 2069036
-Channel : 0	Period : 1000000.00		OnTime : 50000	Start_Time : 2072604
-Channel : 1	Period : 500000.00		OnTime : 50000	Start_Time : 2078587
-Channel : 2	Period : 333333.33		OnTime : 66666	Start_Time : 2084574
-Channel : 3	Period : 250000.00		OnTime : 75000	Start_Time : 2090559
-Channel : 4	Period : 200000.00		OnTime : 80000	Start_Time : 2096545
-Channel : 5	Period : 166666.67		OnTime : 75000	Start_Time : 2102540
-Channel : 6	Period : 142857.14		OnTime : 71428	Start_Time : 2108521
-Channel : 7	Period : 125000.00		OnTime : 68750	Start_Time : 2114504
+Starting ITimer OK, micros() = 2072589
+Channel : 0	    Period : 1000000.00		OnTime : 50000	Start_Time : 2076168
+Channel : 1	    Period : 500000.00		OnTime : 50000	Start_Time : 2082485
+Channel : 2	    Period : 333333.33		OnTime : 66666	Start_Time : 2088818
+Channel : 3	    Period : 250000.00		OnTime : 75000	Start_Time : 2095149
+Channel : 4	    Period : 200000.00		OnTime : 80000	Start_Time : 2101479
+Channel : 5	    Period : 166666.67		OnTime : 75000	Start_Time : 2107820
+Channel : 6	    Period : 142857.14		OnTime : 71428	Start_Time : 2114152
+Channel : 7	    Period : 125000.00		OnTime : 68750	Start_Time : 2120482
 ```
 
 ---
@@ -760,19 +773,19 @@ The following is the sample terminal output when running example [ISR_16_PWMs_Ar
 
 ```
 Starting ISR_16_PWMs_Array_Simple on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.1
+ESP8266_PWM v1.2.2
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
-Starting ITimer OK, micros() = 2068076
-Channel : 0	Period : 1000000.00		OnTime : 50000	Start_Time : 2071644
-Channel : 1	Period : 500000.00		OnTime : 50000	Start_Time : 2077622
-Channel : 2	Period : 333333.33		OnTime : 66666	Start_Time : 2083610
-Channel : 3	Period : 250000.00		OnTime : 75000	Start_Time : 2089595
-Channel : 4	Period : 200000.00		OnTime : 80000	Start_Time : 2095581
-Channel : 5	Period : 166666.67		OnTime : 75000	Start_Time : 2101575
-Channel : 6	Period : 142857.14		OnTime : 71428	Start_Time : 2107557
-Channel : 7	Period : 125000.00		OnTime : 68750	Start_Time : 2113540
+Starting ITimer OK, micros() = 2073472
+Channel : 0	    Period : 1000000.00		OnTime : 50000	Start_Time : 2077055
+Channel : 1	    Period : 500000.00		OnTime : 50000	Start_Time : 2083379
+Channel : 2	    Period : 333333.33		OnTime : 66666	Start_Time : 2089704
+Channel : 3	    Period : 250000.00		OnTime : 75000	Start_Time : 2096036
+Channel : 4	    Period : 200000.00		OnTime : 80000	Start_Time : 2102366
+Channel : 5	    Period : 166666.67		OnTime : 75000	Start_Time : 2108707
+Channel : 6	    Period : 142857.14		OnTime : 71428	Start_Time : 2115038
+Channel : 7	    Period : 125000.00		OnTime : 68750	Start_Time : 2121369
 ```
 
 ---
@@ -783,18 +796,21 @@ The following is the sample terminal output when running example [ISR_Modify_PWM
 
 ```
 Starting ISR_Modify_PWM on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.1
+ESP8266_PWM v1.2.2
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
-Starting ITimer OK, micros() = 2073776
+Starting ITimer OK, micros() = 2073766
 Using PWM Freq = 1.00, PWM DutyCycle = 10.00
-Channel : 0	Period : 1000000.00		OnTime : 100000	Start_Time : 2081329
-Channel : 0	Period : 500000.00		OnTime : 450000	Start_Time : 12088080
-Channel : 0	Period : 1000000.00		OnTime : 100000	Start_Time : 22089021
-Channel : 0	Period : 500000.00		OnTime : 450000	Start_Time : 32090020
-Channel : 0	Period : 1000000.00		OnTime : 100000	Start_Time : 42091024
-Channel : 0	Period : 500000.00		OnTime : 450000	Start_Time : 52092019
+Channel : 0	    Period : 1000000.00		OnTime : 100000	Start_Time : 2081326
+Channel : 0	New Period : 500000.00		OnTime : 450000.00	Start_Time : 12081374
+Channel : 0	New Period : 1000000.00		OnTime : 100000.00	Start_Time : 22081600
+Channel : 0	New Period : 500000.00		OnTime : 450000.00	Start_Time : 31581654
+Channel : 0	New Period : 1000000.00		OnTime : 100000.00	Start_Time : 42081893
+Channel : 0	New Period : 500000.00		OnTime : 450000.00	Start_Time : 51581947
+Channel : 0	New Period : 1000000.00		OnTime : 100000.00	Start_Time : 62082185
+Channel : 0	New Period : 500000.00		OnTime : 450000.00	Start_Time : 71582239
+Channel : 0	New Period : 1000000.00		OnTime : 100000.00	Start_Time : 82082477
 ```
 
 ---
@@ -805,19 +821,33 @@ The following is the sample terminal output when running example [ISR_Changing_P
 
 ```
 Starting ISR_Changing_PWM on ESP8266_NODEMCU_ESP12E
-ESP8266_PWM v1.2.1
+ESP8266_PWM v1.2.2
 CPU Frequency = 160 MHz
 [PWM] ESP8266TimerInterrupt: Timer Clock fre = 80000000
 [PWM] Timer fre = 50000.00 , _count = 1600
-Starting ITimer OK, micros() = 2067311
+Starting ITimer OK, micros() = 2073309
 Using PWM Freq = 1.00, PWM DutyCycle = 50.00
-Channel : 0	Period : 1000000.00		OnTime : 500000	Start_Time : 2074888
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 2080902
 Using PWM Freq = 2.00, PWM DutyCycle = 90.00
-Channel : 0	Period : 500000.00		OnTime : 450000	Start_Time : 12081088
+Channel : 0	    Period : 500000.00		OnTime : 450000	Start_Time : 12087445
 Using PWM Freq = 1.00, PWM DutyCycle = 50.00
-Channel : 0	Period : 1000000.00		OnTime : 500000	Start_Time : 22081402
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 22087762
 Using PWM Freq = 2.00, PWM DutyCycle = 90.00
-Channel : 0	Period : 500000.00		OnTime : 450000	Start_Time : 32081701
+Channel : 0	    Period : 500000.00		OnTime : 450000	Start_Time : 32088065
+Using PWM Freq = 1.00, PWM DutyCycle = 50.00
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 42088370
+Using PWM Freq = 2.00, PWM DutyCycle = 90.00
+Channel : 0	    Period : 500000.00		OnTime : 450000	Start_Time : 52088673
+Using PWM Freq = 1.00, PWM DutyCycle = 50.00
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 62088982
+Using PWM Freq = 2.00, PWM DutyCycle = 90.00
+Channel : 0	    Period : 500000.00		OnTime : 450000	Start_Time : 72089285
+Using PWM Freq = 1.00, PWM DutyCycle = 50.00
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 82089593
+Using PWM Freq = 2.00, PWM DutyCycle = 90.00
+Channel : 0	    Period : 500000.00		OnTime : 450000	Start_Time : 92089898
+Using PWM Freq = 1.00, PWM DutyCycle = 50.00
+Channel : 0	    Period : 1000000.00		OnTime : 500000	Start_Time : 102090204
 ```
 
 ---
@@ -869,7 +899,7 @@ Submit issues to: [ESP8266_PWM issues](https://github.com/khoih-prog/ESP8266_PWM
 4. Add functions to modify PWM settings on-the-fly
 5. Improve accuracy by using `double`, instead of `uint32_t` for `dutycycle`, `period`
 6. Optimize library code by using `reference-passing` instead of `value-passing`
-
+7. DutyCycle to be optionally updated at the end current PWM period instead of immediately.
 
 ---
 ---
@@ -882,9 +912,13 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 
 - [Change Duty Cycle #1](https://github.com/khoih-prog/ESP8266_PWM/issues/1) leading to v1.1.0
 
-2. Thanks to [ggmichael](https://github.com/ggmichael) to request better PWM resolution in
+2. Thanks to [ggmichael](https://github.com/ggmichael) to request better PWM resolution, leading to v1.2.0, in
 
-- [Change Duty Cycle #1](https://github.com/khoih-prog/ESP8266_PWM/issues/1#issuecomment-1024969658) leading to v1.2.0
+- [Change Duty Cycle #1](https://github.com/khoih-prog/ESP8266_PWM/issues/1#issuecomment-1024969658)
+
+and enhancement request as well as testing to verify, leading to v1.2.2, in
+
+- [DutyCycle to be updated at the end current PWM period #2](https://github.com/khoih-prog/ESP8266_PWM/issues/2)
 
 
 <table>
@@ -899,6 +933,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 ## Contributing
 
 If you want to contribute to this project:
+
 - Report bugs and errors
 - Ask for enhancements
 - Create issues and pull requests
