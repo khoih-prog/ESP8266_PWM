@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.2.3](#releases-v123)
   * [Releases v1.2.2](#releases-v122)
   * [Releases v1.2.1](#releases-v121)
   * [Releases v1.2.0](#releases-v120)
@@ -22,6 +23,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.2.3
+
+1. Use `float` for `DutyCycle` and `Freq`, `uint32_t` for `period`. 
+2. Optimize code by not calculation in ISR
 
 ### Releases v1.2.2
 

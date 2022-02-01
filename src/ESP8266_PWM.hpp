@@ -17,7 +17,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.2.2
+  Version: 1.2.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   1.2.0   K Hoang      29/01/2022 Fix multiple-definitions linker error. Improve accuracy
   1.2.1   K Hoang      30/01/2022 Fix bug. Optimize code
   1.2.2   K Hoang      30/01/2022 DutyCycle to be updated at the end current PWM period
+  1.2.3   K Hoang      01/02/2022 Use float for DutyCycle and Freq, uint32_t for period. Optimize code
 *****************************************************************************************************************************/
 
 #pragma once
@@ -40,13 +41,13 @@
 #include "Arduino.h"
 
 #ifndef ESP8266_PWM_VERSION
-  #define ESP8266_PWM_VERSION           "ESP8266_PWM v1.2.2"
+  #define ESP8266_PWM_VERSION           "ESP8266_PWM v1.2.3"
   
   #define ESP8266_PWM_VERSION_MAJOR     1
   #define ESP8266_PWM_VERSION_MINOR     2
-  #define ESP8266_PWM_VERSION_PATCH     2
+  #define ESP8266_PWM_VERSION_PATCH     3
 
-  #define ESP8266_PWM_VERSION_INT       1002002
+  #define ESP8266_PWM_VERSION_INT       1002003
 #endif
 
 #ifndef TIMER_INTERRUPT_DEBUG

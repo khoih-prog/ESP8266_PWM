@@ -16,7 +16,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.2.2
+  Version: 1.2.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -25,6 +25,7 @@
   1.2.0   K Hoang      29/01/2022 Fix multiple-definitions linker error. Improve accuracy
   1.2.1   K Hoang      30/01/2022 Fix bug. Optimize code
   1.2.2   K Hoang      30/01/2022 DutyCycle to be updated at the end current PWM period
+  1.2.3   K Hoang      01/02/2022 Use float for DutyCycle and Freq, uint32_t for period. Optimize code
 *****************************************************************************************************************************/
 
 #pragma once
@@ -122,7 +123,7 @@ void IRAM_ATTR ESP8266_PWM_ISR::run()
           PWM[channelNum].period    = PWM[channelNum].newPeriod;
           PWM[channelNum].newPeriod = 0;
           
-          PWM[channelNum].onTime  = ( PWM[channelNum].period * PWM[channelNum].newDutyCycle ) / 100;
+          PWM[channelNum].onTime  = PWM[channelNum].newOnTime;
         }
 #endif
       }      
@@ -159,12 +160,12 @@ int ESP8266_PWM_ISR::findFirstFreeSlot()
 ///////////////////////////////////////////////////
 
 // Return the channelNum if OK, -1 if error
-int ESP8266_PWM_ISR::setupPWMChannel(const uint32_t& pin, const double& period, const double& dutycycle, void* cbStartFunc, void* cbStopFunc)
+int ESP8266_PWM_ISR::setupPWMChannel(const uint32_t& pin, const uint32_t& period, const float& dutycycle, void* cbStartFunc, void* cbStopFunc)
 {
   int channelNum;
   
   // Invalid input, such as period = 0, etc
-  if ( (period <= 0.0) || (dutycycle < 0.0) || (dutycycle > 100.0) )
+  if ( (period == 0) || (dutycycle < 0.0) || (dutycycle > 100.0) )
   {
     PWM_LOGERROR("Error: Invalid period or dutycycle");
     return -1;
@@ -213,10 +214,10 @@ int ESP8266_PWM_ISR::setupPWMChannel(const uint32_t& pin, const double& period, 
 
 ///////////////////////////////////////////////////
 
-bool ESP8266_PWM_ISR::modifyPWMChannel_Period(const uint8_t& channelNum, const uint32_t& pin, const double& period, const double& dutycycle)
+bool ESP8266_PWM_ISR::modifyPWMChannel_Period(const uint8_t& channelNum, const uint32_t& pin, const uint32_t& period, const float& dutycycle)
 {
   // Invalid input, such as period = 0, etc
-  if ( (period <= 0.0) || (dutycycle < 0.0) || (dutycycle > 100.0) )
+  if ( (period == 0) || (dutycycle < 0.0) || (dutycycle > 100.0) )
   {
     PWM_LOGERROR("Error: Invalid period or dutycycle");
     return false;
@@ -238,10 +239,11 @@ bool ESP8266_PWM_ISR::modifyPWMChannel_Period(const uint8_t& channelNum, const u
 
   PWM[channelNum].newPeriod     = period;
   PWM[channelNum].newDutyCycle  = dutycycle;
+  PWM[channelNum].newOnTime     = ( period * dutycycle ) / 100;
   
   PWM_LOGDEBUG0("Channel : ");      PWM_LOGDEBUG0(channelNum); 
   PWM_LOGDEBUG0("\tNew Period : "); PWM_LOGDEBUG0(PWM[channelNum].newPeriod);
-  PWM_LOGDEBUG0("\t\tOnTime : ");   PWM_LOGDEBUG0(( period * dutycycle ) / 100); 
+  PWM_LOGDEBUG0("\t\tOnTime : ");   PWM_LOGDEBUG0(PWM[channelNum].newOnTime); 
   PWM_LOGDEBUG0("\tStart_Time : "); PWM_LOGDEBUGLN0(PWM[channelNum].prevTime);
   
 #else
