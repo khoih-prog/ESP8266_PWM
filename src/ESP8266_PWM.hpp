@@ -17,7 +17,7 @@
   Therefore, their executions are not blocked by bad-behaving functions / tasks.
   This important feature is absolutely necessary for mission-critical tasks.
 
-  Version: 1.2.3
+  Version: 1.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,7 +26,8 @@
   1.2.0   K Hoang      29/01/2022 Fix multiple-definitions linker error. Improve accuracy
   1.2.1   K Hoang      30/01/2022 Fix bug. Optimize code
   1.2.2   K Hoang      30/01/2022 DutyCycle to be updated at the end current PWM period
-  1.2.3   K Hoang      01/02/2022 Use float for DutyCycle and Freq, uint32_t for period. Optimize code
+  1.2.3   K Hoang      01/02/2022 Use float for DutyCycle and Freq, uint32_t for period
+  1.2.4   K Hoang      04/03/2022 Fix `DutyCycle` and `New Period` display bugs. Display warning only when debug level > 3
 *****************************************************************************************************************************/
 
 #pragma once
@@ -41,13 +42,13 @@
 #include "Arduino.h"
 
 #ifndef ESP8266_PWM_VERSION
-  #define ESP8266_PWM_VERSION           "ESP8266_PWM v1.2.3"
+  #define ESP8266_PWM_VERSION           "ESP8266_PWM v1.2.4"
   
   #define ESP8266_PWM_VERSION_MAJOR     1
   #define ESP8266_PWM_VERSION_MINOR     2
-  #define ESP8266_PWM_VERSION_PATCH     3
+  #define ESP8266_PWM_VERSION_PATCH     4
 
-  #define ESP8266_PWM_VERSION_INT       1002003
+  #define ESP8266_PWM_VERSION_INT       1002004
 #endif
 
 #ifndef TIMER_INTERRUPT_DEBUG
@@ -103,15 +104,24 @@ typedef void (*esp8266_timer_callback)  ();
 #define TIM_DIV256_CLOCK        (312500UL)            // 80000000 / 256 = 312.5 KHz
 
 #if ( defined(USING_TIM_DIV1) && USING_TIM_DIV1 )
-  #warning Using TIM_DIV1_CLOCK for shortest and most accurate timer
+  #if (_PWM_LOGLEVEL_ > 3)
+    #warning Using TIM_DIV1_CLOCK for shortest and most accurate timer
+  #endif
+  
   #define TIM_CLOCK_FREQ        TIM_DIV1_CLOCK
   #define TIM_DIV               TIM_DIV1
 #elif ( defined(USING_TIM_DIV16) && USING_TIM_DIV16 )
-  #warning Using TIM_DIV16_CLOCK for medium time and medium accurate timer
+  #if (_PWM_LOGLEVEL_ > 3)
+    #warning Using TIM_DIV16_CLOCK for medium time and medium accurate timer
+  #endif
+  
   #define TIM_CLOCK_FREQ        TIM_DIV16_CLOCK
   #define TIM_DIV               TIM_DIV16
 #elif ( defined(USING_TIM_DIV256) && USING_TIM_DIV256 )
-  #warning Using TIM_DIV256_CLOCK for longest timer but least accurate
+  #if (_PWM_LOGLEVEL_ > 3)
+    #warning Using TIM_DIV256_CLOCK for longest timer but least accurate
+  #endif
+  
   #define TIM_CLOCK_FREQ        TIM_DIV256_CLOCK
   #define TIM_DIV               TIM_DIV256  
 #else
