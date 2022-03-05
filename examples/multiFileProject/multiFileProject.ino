@@ -14,8 +14,8 @@
   #error This code is designed to run on ESP8266 and ESP8266-based boards! Please check your Tools->Board setting.
 #endif
 
-#define ESP8266_PWM_VERSION_MIN_TARGET      "ESP8266_PWM v1.2.3"
-#define ESP8266_PWM_VERSION_MIN             1002003
+#define ESP8266_PWM_VERSION_MIN_TARGET      "ESP8266_PWM v1.2.4"
+#define ESP8266_PWM_VERSION_MIN             1002004
 
 #include "multiFileProject.h"
 
