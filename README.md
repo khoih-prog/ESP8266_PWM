@@ -2,12 +2,16 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_PWM.svg?)](https://www.ardu-badge.com/ESP8266_PWM)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP8266_PWM.svg)](https://github.com/khoih-prog/ESP8266_PWM/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/ESP8266_PWM/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/ESP8266_PWM/blob/main/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/ESP8266_PWM.svg)](http://github.com/khoih-prog/ESP8266_PWM/issues)
 
+
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-ESP8266_PWM/count.svg" title="ESP8266_PWM Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-ESP8266_PWM/count.svg" style="height: 30px;width: 200px;"></a>
+
 
 ---
 ---
@@ -64,7 +68,7 @@ As more complex calculation and check **inside ISR** are introduced from v1.2.0,
 You can modify to use larger `HW_TIMER_INTERVAL_US`, (from current 20uS), according to your board and use-case if crash happens.
 
 
-```
+```cpp
 // Current 20uS
 #define HW_TIMER_INTERVAL_US      20L
 ```
@@ -155,9 +159,9 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 Another way to install is to:
 
 1. Navigate to [**ESP8266_PWM**](https://github.com/khoih-prog/ESP8266_PWM) page.
-2. Download the latest release `ESP8266_PWM-master.zip`.
-3. Extract the zip file to `ESP8266_PWM-master` directory 
-4. Copy whole `ESP8266_PWM-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+2. Download the latest release `ESP8266_PWM-main.zip`.
+3. Extract the zip file to `ESP8266_PWM-main` directory 
+4. Copy whole `ESP8266_PWM-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
@@ -177,14 +181,14 @@ The current library implementation, using `xyz-Impl.h` instead of standard `xyz.
 
 You can include this `.hpp` file
 
-```
+```cpp
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.hpp"     //https://github.com/khoih-prog/ESP8266_PWM
 ```
 
 in many files. But be sure to use the following `.h` file **in just 1 `.h`, `.cpp` or `.ino` file**, which must **not be included in any other file**, to avoid `Multiple Definitions` Linker Error
 
-```
+```cpp
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include "ESP8266_PWM.h"           //https://github.com/khoih-prog/ESP8266_PWM
 ```
@@ -252,7 +256,7 @@ https://github.com/khoih-prog/ESP8266_PWM/blob/192da873e974795080a2e38163ed4397c
 The following is the sample terminal output when running example [ISR_16_PWMs_Array_Complex](examples/ISR_16_PWMs_Array_Complex) to demonstrate the accuracy of ISR Hardware PWM-channels, **especially when system is very busy**.  The ISR PWM-channels is **running exactly according to corresponding programmed periods**
 
 
-```
+```cpp
 Starting ISR_16_PWMs_Array_Complex on ESP8266_NODEMCU_ESP12E
 ESP8266_PWM v1.2.4
 CPU Frequency = 160 MHz
@@ -302,7 +306,7 @@ PWM Channel : 7, programmed Period (us): 125000.00, actual : 125019, programmed 
 
 The following is the sample terminal output when running example [ISR_16_PWMs_Array](examples/ISR_16_PWMs_Array) to demonstrate how to use multiple Hardware PWM channels.
 
-```
+```cpp
 Starting ISR_16_PWMs_Array on ESP8266_NODEMCU_ESP12E
 ESP8266_PWM v1.2.4
 CPU Frequency = 160 MHz
@@ -326,7 +330,7 @@ Channel : 7	    Period : 125000		OnTime : 68750	Start_Time : 2120482
 
 The following is the sample terminal output when running example [ISR_16_PWMs_Array_Simple](examples/ISR_16_PWMs_Array_Simple) to demonstrate how to use multiple Hardware PWM channels.
 
-```
+```cpp
 Starting ISR_16_PWMs_Array_Simple on ESP8266_NODEMCU_ESP12E
 ESP8266_PWM v1.2.4
 CPU Frequency = 160 MHz
@@ -349,7 +353,7 @@ Channel : 7	    Period : 125000		OnTime : 68750	Start_Time : 2121369
 
 The following is the sample terminal output when running example [ISR_Modify_PWM](examples/ISR_Modify_PWM) to demonstrate how to modify PWM settings on-the-fly without deleting the PWM channel
 
-```
+```cpp
 Starting ISR_Modify_PWM on ESP8266_NODEMCU_ESP12E
 ESP8266_PWM v1.2.4
 CPU Frequency = 160 MHz
@@ -383,7 +387,7 @@ Channel : 0	    Period : 10000		OnTime : 555	Start_Time : 172102056
 
 The following is the sample terminal output when running example [ISR_Changing_PWM](examples/ISR_Changing_PWM) to demonstrate how to modify PWM settings on-the-fly by deleting the PWM channel and reinit the PWM channel
 
-```
+```cpp
 Starting ISR_Changing_PWM on ESP8266_NODEMCU_ESP12E
 ESP8266_PWM v1.2.4
 CPU Frequency = 160 MHz
@@ -508,7 +512,7 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [MIT](https://github.com/khoih-prog/ESP8266_PWM/blob/master/LICENSE)
+- The library is licensed under [MIT](https://github.com/khoih-prog/ESP8266_PWM/blob/main/LICENSE)
 
 ---
 
